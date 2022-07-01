@@ -1,0 +1,32 @@
+trigger:
+- CI-Artifact
+
+pool:
+  name: "Default"
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**/**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Artifacts'
+
+- task: UniversalPackages@0
+  displayName: Upload artifact to azure artifacts
+  inputs:
+    command: 'publish'
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: '871b5c92-e7c1-46cd-afc9-9da32a4ccffe'
+    vstsFeedPackagePublish: 'app-artifact'
+    versionOption: 'patch'
