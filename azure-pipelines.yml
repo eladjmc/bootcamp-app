@@ -1,5 +1,5 @@
 trigger:
-- CI-Artifact
+- main
 
 pool:
   name: "Default"
